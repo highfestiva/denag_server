@@ -2,3 +2,5 @@
 Debug/
 denag_server.vcxproj.filters
 denag_server.vcxproj.user
+denag_server
+*.log

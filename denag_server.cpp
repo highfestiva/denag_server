@@ -3,13 +3,17 @@
 #define close closesocket
 #pragma comment(lib, "Ws2_32.lib")
 #else
+#include <stdio.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <unistd.h>
 #endif
 #include <string>
 #include <unordered_map>
 
 
-#define PORT 384
+#define PORT 3384
 using namespace std;
 typedef unordered_map<string, string> smap;
 
@@ -23,24 +27,26 @@ int main(int argv, char* argc[]) {
 	WSAStartup(MAKEWORD(2, 2), &socket_data);
 #endif
 
-	int s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	int s = socket(AF_INET, SOCK_STREAM, 0);
 	if (s == -1) {
-		perror("Unable to create socket!");
+		perror("Unable to create socket");
 		return 1;
 	}
 	sockaddr_in addr;
+	bzero((char*)&addr, sizeof(addr));
 	addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(PORT);
-	if (bind(s, (struct sockaddr*)&addr, sizeof(addr)) != 0) {
-		perror("Unable to bind socket!");
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons(PORT);
+	if (bind(s, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+		perror("Unable to bind socket");
 		return 1;
 	}
-	listen(s, 5);
+	listen(s, 2);
 
+	printf("Server started.\n");
 	for (;;) {
 		sockaddr client_addr;
-		int __size = sizeof(client_addr);
+		socklen_t __size = sizeof(client_addr);
 		int cs = accept(s, &client_addr, &__size);
 		char data[256];
 		int len = recv(cs, data, (int)sizeof(data), 0);
