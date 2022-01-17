@@ -26,8 +26,8 @@ int main(int argv, char* argc[]) {
 
 	char value[256];
 	sprintf(value, "%d-%d", 120 * 60, (int)time(0));
-	map["lokis"] = value;
-	map["mirjis"] = value;
+	//map["lokis_gametime"] = value;
+	map["mirjis_gametime"] = value;
 
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
