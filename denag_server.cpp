@@ -10,6 +10,7 @@
 #include <unistd.h>
 #endif
 #include <string>
+#include <time.h>
 #include <unordered_map>
 
 
@@ -22,6 +23,15 @@ smap map;
 
 
 int main(int argv, char* argc[]) {
+
+	char value[256];
+	sprintf(value, "%d-%d", 120 * 60, (int)time(0));
+	map["lokis"] = value;
+	map["mirjis"] = value;
+
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+
 #ifdef WIN32
 	WSADATA socket_data;
 	WSAStartup(MAKEWORD(2, 2), &socket_data);
